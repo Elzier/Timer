@@ -1,7 +1,7 @@
 <template>
-  <Header/>
-  <hr/>
-  <Timer/>
+  <Header />
+  <hr />
+  <Timer />
 </template>
 
 <script>
@@ -12,8 +12,14 @@ export default {
   name: 'App',
   components: {
     Timer,
-    Header
-  }
+    Header,
+  },
+  mounted() {
+    this.$store.commit('readTimers')
+    setInterval(() => {
+      this.$store.dispatch('tickTimer')
+    }, 1000)
+  },
 }
 </script>
 

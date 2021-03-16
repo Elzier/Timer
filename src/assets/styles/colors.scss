@@ -2,3 +2,23 @@ $red-theme: #f30305;
 $green-theme: #32fe01;
 $blue-theme: #0344ff;
 $unactive: #b7b7b7;
+
+// .main :class={activeTheme === 'red', theme-red}
+
+// .theme-red {
+//   .text {
+//     color: blue
+//   }
+//   .block {
+//     background-color: #f30305;
+//   }
+// }
+
+// .theme-blue {
+//   .text {
+//     color: white
+//   }
+//   .block {
+//     background-color: $blue-theme;
+//   }
+// }

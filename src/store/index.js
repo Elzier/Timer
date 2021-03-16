@@ -1,24 +1,29 @@
 import { createStore } from 'vuex'
+import { setTimers, getTimers } from '../util'
 
 export default createStore({
   state: {
-    timers: [
-      {
-        id: 1576996323453,
-        d: 15,
-        h: 20,
-        m: 25,
-        s: 55,
-      },
-    ],
+    timers: [],
   },
 
   mutations: {
-    setTimeLeft(state, timeLeft) {
-      state.timers.push(timeLeft)
-    },
     deleteTimer(state, id) {
       state.timers = state.timers.filter((timer) => timer.id !== id)
+      setTimers(state.timers)
+    },
+    addTimer(state, payload) {
+      state.timers.push(payload)
+      console.log(state.timers)
+      setTimers(state.timers)
+    },
+    tickTimer(state) {
+      state.timers.forEach((timer) => {
+        timer.seconds--
+      })
+      setTimers(state.timers)
+    },
+    readTimers(state) {
+      state.timers = getTimers()
     },
   },
 
@@ -26,32 +31,41 @@ export default createStore({
     countDown: ({ commit }, data) => {
       const currentTime = new Date().getTime()
       const timerExpiration = new Date(data).getTime()
-      const remainedTime = timerExpiration - currentTime
-      let s = Math.floor(remainedTime / 1000)
-      let m = Math.floor(s / 60)
-      let h = Math.floor(m / 60)
-      let d = Math.floor(h / 24)
+      const remainedTime = Math.floor((timerExpiration - currentTime) / 1000)
 
-      h %= 24
-      m %= 60
-      s %= 60
-
-      const timeLeft = {
+      commit('addTimer', {
         id: Date.now(),
-        d,
-        h,
-        m,
-        s,
-      }
-
-      commit('setTimeLeft', timeLeft)
+        seconds: remainedTime,
+      })
     },
     deleteTimer: ({ commit }, id) => {
       commit('deleteTimer', id)
     },
+    tickTimer: ({ commit }) => {
+      commit('tickTimer')
+    },
   },
   getters: {
-    timers: ({ timers }) => timers,
+    timers: ({ timers }) => {
+      return timers.map((timer) => {
+        let s = timer.seconds
+        let m = Math.floor(s / 60)
+        let h = Math.floor(m / 60)
+        let d = Math.floor(h / 24)
+
+        h %= 24
+        m %= 60
+        s %= 60
+
+        return {
+          id: timer.id,
+          d,
+          h,
+          m,
+          s,
+        }
+      })
+    },
   },
   modules: {},
 })
