@@ -1,5 +1,5 @@
 <template>
-  <section class="timer">
+  <section class="list">
     <div class="form">
       <div @click="countDown(timerData)" class="form__add"></div>
       <div class="form__input">
@@ -38,13 +38,6 @@ export default {
     timerData: '',
   }),
   methods: {
-    // logg() {
-    //   // console.log(new Date(this.timerData).getTime())
-    //   let now = new Date()
-    //   now.setMinutes(now.getMinutes() - now.getTimezoneOffset())
-    //   this.timerData = now.toISOString().slice(0,16)
-    //   console.log(this.timerData)
-    // }
     ...mapActions(['countDown']),
   },
   computed: {
@@ -59,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss">
-.timer {
+.list {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -93,15 +86,13 @@ export default {
       position: absolute;
     }
   }
-  &__input {
-  }
   &__label {
     display: block;
     font-size: 12px;
   }
 }
 .timers {
-  width: 200px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
