@@ -14,10 +14,11 @@
         <div class="item__number">{{ seconds }}</div>
       </div>
 
-      <div class="timer__close">
+      <div @click="deleteTimer(id)" class="timer__close">
         <span>×</span>
       </div>
     </div>
+
     <div class="labels">
       <div class="labels__item">DNI</div>
       <div class="labels__item">GODZ</div>
@@ -28,8 +29,13 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
+    id: {
+      type: Number,
+      default: 0,
+    },
     days: {
       type: Number,
       default: 0,
@@ -46,6 +52,12 @@ export default {
       type: Number,
       default: 0,
     },
+  },
+  // data: () => ({
+  //   timerId: this.id,
+  // }),
+  methods: {
+    ...mapActions(['deleteTimer']),
   },
 }
 </script>

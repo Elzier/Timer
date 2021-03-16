@@ -14,7 +14,8 @@
     </div>
     <ul class="timers">
       <TimersItem
-        v-for="({ d, h, m, s }, key) in timers"
+        v-for="({ id, d, h, m, s }, key) in timers"
+        :id="id"
         :key="key"
         :days="d"
         :hours="h"

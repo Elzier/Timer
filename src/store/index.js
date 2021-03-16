@@ -4,6 +4,7 @@ export default createStore({
   state: {
     timers: [
       {
+        id: 1576996323453,
         d: 15,
         h: 20,
         m: 25,
@@ -11,12 +12,16 @@ export default createStore({
       },
     ],
   },
+
   mutations: {
     setTimeLeft(state, timeLeft) {
-      console.log(timeLeft)
       state.timers.push(timeLeft)
     },
+    deleteTimer(state, id) {
+      state.timers = state.timers.filter((timer) => timer.id !== id)
+    },
   },
+
   actions: {
     countDown: ({ commit }, data) => {
       const currentTime = new Date().getTime()
@@ -31,9 +36,18 @@ export default createStore({
       m %= 60
       s %= 60
 
-      const timeLeft = { d, h, m, s }
+      const timeLeft = {
+        id: Date.now(),
+        d,
+        h,
+        m,
+        s,
+      }
 
       commit('setTimeLeft', timeLeft)
+    },
+    deleteTimer: ({ commit }, id) => {
+      commit('deleteTimer', id)
     },
   },
   getters: {
