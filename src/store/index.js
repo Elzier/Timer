@@ -1,29 +1,53 @@
 import { createStore } from 'vuex'
-import { setTimers, getTimers } from '../util'
+import {
+  setLocalStorageTimers,
+  getLocalStorageTimers,
+  setLocalStorageLang,
+  getLocalStorageLang,
+  setLocalStorageTheme,
+  getLocalStorageTheme,
+} from '../util'
 
 export default createStore({
   state: {
     timers: [],
+    lang: 'pl',
+    theme: '',
+    wrongDateError: false,
   },
 
   mutations: {
     deleteTimer(state, id) {
       state.timers = state.timers.filter((timer) => timer.id !== id)
-      setTimers(state.timers)
+      setLocalStorageTimers(state.timers)
     },
     addTimer(state, payload) {
       state.timers.push(payload)
       console.log(state.timers)
-      setTimers(state.timers)
+      setLocalStorageTimers(state.timers)
     },
     tickTimer(state) {
       state.timers.forEach((timer) => {
         timer.seconds--
       })
-      setTimers(state.timers)
+      setLocalStorageTimers(state.timers)
     },
-    readTimers(state) {
-      state.timers = getTimers()
+    readLoacalStorage(state) {
+      state.timers = getLocalStorageTimers()
+      state.lang = getLocalStorageLang() || 'pl'
+      state.theme = getLocalStorageTheme()
+    },
+    changeLanguage(state, language) {
+      state.lang = language
+      setLocalStorageLang(language)
+    },
+    changeTheme(state, theme) {
+      state.theme = theme
+      setLocalStorageTheme(theme)
+    },
+    setError(state) {
+      state.wrongDateError = !state.wrongDateError
+      console.log(state.wrongDateError)
     },
   },
 
@@ -32,6 +56,10 @@ export default createStore({
       const currentTime = new Date().getTime()
       const timerExpiration = new Date(data).getTime()
       const remainedTime = Math.floor((timerExpiration - currentTime) / 1000)
+      if (remainedTime <= 0) {
+        commit('setError')
+        return
+      }
 
       commit('addTimer', {
         id: Date.now(),
@@ -66,6 +94,9 @@ export default createStore({
         }
       })
     },
+    getLang: ({ lang }) => lang,
+    getTheme: ({ theme }) => theme,
+    getError: ({ wrongDateError }) => wrongDateError,
   },
   modules: {},
 })

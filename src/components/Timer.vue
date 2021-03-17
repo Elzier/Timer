@@ -3,7 +3,9 @@
     <div class="form">
       <div @click="countDown(timerData)" class="form__add"></div>
       <div class="form__input">
-        <label class="form__label" for="timer">Nowy licznik:</label>
+        <label class="form__label" for="timer">{{
+          t('newTimer', {}, { locale: getLang })
+        }}</label>
         <input
           v-model="timerData"
           id="timer"
@@ -13,15 +15,17 @@
       </div>
     </div>
     <ul class="timers">
-      <TimersItem
-        v-for="({ id, d, h, m, s }, key) in timers"
-        :id="id"
-        :key="key"
-        :days="d"
-        :hours="h"
-        :minutes="m"
-        :seconds="s"
-      />
+      <transition-group name="list">
+        <TimersItem
+          v-for="({ id, d, h, m, s }, key) in timers"
+          :id="id"
+          :key="key"
+          :days="d"
+          :hours="h"
+          :minutes="m"
+          :seconds="s"
+        />
+      </transition-group>
     </ul>
   </section>
 </template>
@@ -29,8 +33,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import TimersItem from './TimersItem'
+import { useI18n } from 'vue-i18n'
 
 export default {
+  setup: () => {
+    const { t, locale } = useI18n()
+    return { t, locale }
+  },
   name: 'Timer',
   components: {
     TimersItem,
@@ -42,7 +51,7 @@ export default {
     ...mapActions(['countDown']),
   },
   computed: {
-    ...mapGetters(['timers']),
+    ...mapGetters(['timers', 'getLang']),
   },
   mounted() {
     let now = new Date()
@@ -53,6 +62,20 @@ export default {
 </script>
 
 <style lang="scss">
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 .list {
   display: flex;
   align-items: center;
@@ -65,6 +88,7 @@ export default {
   display: flex;
   align-items: center;
   &__add {
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;

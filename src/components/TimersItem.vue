@@ -1,17 +1,38 @@
 <template>
   <li class="timer">
-    <div class="timer__container">
-      <div class="timer__days item">
-        <div class="item__number">{{ days }}</div>
+    <div class="timer__container bg-theme">
+      <div class="timer__unit">
+        <div class="item">
+          <div class="item__number">{{ days }}</div>
+        </div>
+        <div class="labels__item">
+          {{ t('days', {}, { locale: getLang }) }}
+        </div>
       </div>
-      <div class="timer__hours item">
-        <div class="item__number">{{ hours }}</div>
+
+      <div class="timer__unit">
+        <div class="timer__hours item">
+          <div class="item__number">{{ hours }}</div>
+        </div>
+        <div class="labels__item">
+          {{ t('hours', {}, { locale: getLang }) }}
+        </div>
       </div>
-      <div class="timer__minutes item">
-        <div class="item__number">{{ minutes }}</div>
+      <div class="timer__unit">
+        <div class="timer__minutes item">
+          <div class="item__number">{{ minutes }}</div>
+        </div>
+        <div class="labels__item">
+          {{ t('minutes', {}, { locale: getLang }) }}
+        </div>
       </div>
-      <div class="timer__seconds item">
-        <div class="item__number">{{ seconds }}</div>
+      <div class="timer__unit">
+        <div class="timer__seconds item">
+          <div class="item__number">{{ seconds }}</div>
+        </div>
+        <div class="labels__item">
+          {{ t('seconds', {}, { locale: getLang }) }}
+        </div>
       </div>
 
       <div @click="deleteTimer(id)" class="timer__close">
@@ -19,18 +40,20 @@
       </div>
     </div>
 
-    <div class="labels">
-      <div class="labels__item">DNI</div>
-      <div class="labels__item">GODZ</div>
-      <div class="labels__item">MIN</div>
-      <div class="labels__item">SEK</div>
-    </div>
+    <div class="labels"></div>
   </li>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import { useI18n } from 'vue-i18n'
+
 export default {
+  setup: () => {
+    const { t, locale } = useI18n()
+    return { t, locale }
+  },
   props: {
     id: {
       type: Number,
@@ -53,11 +76,11 @@ export default {
       default: 0,
     },
   },
-  // data: () => ({
-  //   timerId: this.id,
-  // }),
   methods: {
     ...mapActions(['deleteTimer']),
+  },
+  computed: {
+    ...mapGetters(['getLang']),
   },
 }
 </script>
@@ -74,13 +97,12 @@ export default {
   height: 100px;
   &__container {
     position: relative;
-    margin-top: 8px;
     width: 250px;
-    height: 58px;
     display: flex;
     justify-content: space-between;
   }
   &__close {
+    cursor: pointer;
     border: 1px black solid;
     background-color: red;
     position: absolute;
@@ -94,15 +116,20 @@ export default {
       top: -3px;
     }
   }
-}
-.labels {
-  display: flex;
-  width: 220px;
-  justify-content: space-between;
-  &__item {
+  &__unit {
     display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
+// .labels {
+//   display: flex;
+//   width: 220px;
+//   justify-content: space-between;
+//   &__item {
+//     display: flex;
+//   }
+// }
 .item {
   display: flex;
   justify-content: center;
@@ -113,5 +140,15 @@ export default {
   &__number {
     font-size: 30px;
   }
+}
+
+.item-enter-active,
+.item-leave-active {
+  transition: opacity 0.9s ease;
+}
+
+.item-enter-from,
+.item-leave-to {
+  opacity: 0;
 }
 </style>
