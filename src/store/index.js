@@ -23,7 +23,6 @@ export default createStore({
     },
     addTimer(state, payload) {
       state.timers.push(payload)
-      console.log(state.timers)
       setLocalStorageTimers(state.timers)
     },
     tickTimer(state) {
@@ -33,9 +32,9 @@ export default createStore({
       setLocalStorageTimers(state.timers)
     },
     readLoacalStorage(state) {
-      state.timers = getLocalStorageTimers()
+      state.timers = getLocalStorageTimers() || []
       state.lang = getLocalStorageLang() || 'pl'
-      state.theme = getLocalStorageTheme()
+      state.theme = getLocalStorageTheme() || ''
     },
     changeLanguage(state, language) {
       state.lang = language
