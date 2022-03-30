@@ -22,7 +22,7 @@ export default {
     BaseError,
   },
   mounted() {
-    this.$store.commit('readLoacalStorage')
+    this.$store.commit('readLocalStorage')
     setInterval(() => {
       this.$store.dispatch('tickTimer')
     }, 1000)

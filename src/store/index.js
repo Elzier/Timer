@@ -18,7 +18,7 @@ export default createStore({
 
   mutations: {
     deleteTimer(state, id) {
-      state.timers = state.timers.filter((timer) => timer.id !== id)
+      state.timers = state.timers.filter(timer => timer.id !== id)
       setLocalStorageTimers(state.timers)
     },
     addTimer(state, payload) {
@@ -26,12 +26,15 @@ export default createStore({
       setLocalStorageTimers(state.timers)
     },
     tickTimer(state) {
-      state.timers.forEach((timer) => {
-        timer.seconds--
+      state.timers = state.timers.filter(timer => {
+        if (timer.seconds > 0) {
+          timer.seconds--
+          return timer
+        }
       })
       setLocalStorageTimers(state.timers)
     },
-    readLoacalStorage(state) {
+    readLocalStorage(state) {
       state.timers = getLocalStorageTimers() || []
       state.lang = getLocalStorageLang() || 'pl'
       state.theme = getLocalStorageTheme() || ''
@@ -46,7 +49,6 @@ export default createStore({
     },
     setError(state) {
       state.wrongDateError = !state.wrongDateError
-      console.log(state.wrongDateError)
     },
   },
 
